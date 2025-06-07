@@ -256,7 +256,7 @@ namespace ImGuiNET
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint igGetID_Int(int int_id);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ImGuiIO* igGetIO();
+        public static extern ImGuiIO* igGetIO_Nil();
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint igGetItemID();
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -282,7 +282,7 @@ namespace ImGuiNET
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void igGetMousePosOnOpeningCurrentPopup(Vector2* pOut);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern ImGuiPlatformIO* igGetPlatformIO();
+        public static extern ImGuiPlatformIO* igGetPlatformIO_Nil();
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern float igGetScrollMaxX();
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -326,9 +326,11 @@ namespace ImGuiNET
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern float igGetWindowWidth();
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void igImage(IntPtr user_texture_id, Vector2 image_size, Vector2 uv0, Vector2 uv1, Vector4 tint_col, Vector4 border_col);
+        public static extern void igImage(IntPtr user_texture_id, Vector2 image_size, Vector2 uv0, Vector2 uv1);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte igImageButton(byte* str_id, IntPtr user_texture_id, Vector2 image_size, Vector2 uv0, Vector2 uv1, Vector4 bg_col, Vector4 tint_col);
+        [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void igImageWithBg(IntPtr user_texture_id, Vector2 image_size, Vector2 uv0, Vector2 uv1, Vector4 bg_col, Vector4 tint_col);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void igIndent(float indent_w);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -413,6 +415,8 @@ namespace ImGuiNET
         public static extern byte igIsMousePosValid(Vector2* mouse_pos);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte igIsMouseReleased_Nil(ImGuiMouseButton button);
+        [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte igIsMouseReleasedWithDelay(ImGuiMouseButton button, float delay);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte igIsPopupOpen_Str(byte* str_id, ImGuiPopupFlags flags);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -1014,8 +1018,6 @@ namespace ImGuiNET
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImFont_RenderText(ImFont* self, ImDrawList* draw_list, float size, Vector2 pos, uint col, Vector4 clip_rect, byte* text_begin, byte* text_end, float wrap_width, byte cpu_fine_clip);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ImFont_SetGlyphVisible(ImFont* self, ushort c, byte visible);
-        [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ImFontAtlas_AddCustomRectFontGlyph(ImFontAtlas* self, ImFont* font, ushort id, int width, int height, float advance_x, Vector2 offset);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ImFontAtlas_AddCustomRectRegular(ImFontAtlas* self, int width, int height);
@@ -1065,8 +1067,6 @@ namespace ImGuiNET
         public static extern ushort* ImFontAtlas_GetGlyphRangesThai(ImFontAtlas* self);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern ushort* ImFontAtlas_GetGlyphRangesVietnamese(ImFontAtlas* self);
-        [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern byte ImFontAtlas_GetMouseCursorTexData(ImFontAtlas* self, ImGuiMouseCursor cursor, Vector2* out_offset, Vector2* out_size, Vector2* out_uv_border, Vector2* out_uv_fill);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImFontAtlas_GetTexDataAsAlpha8(ImFontAtlas* self, byte** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -1284,7 +1284,7 @@ namespace ImGuiNET
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImGuiTextBuffer_append(ImGuiTextBuffer* self, byte* str, byte* str_end);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ImGuiTextBuffer_appendf(ImGuiTextBuffer* buffer, byte* fmt);
+        public static extern void ImGuiTextBuffer_appendf(ImGuiTextBuffer* self, byte* fmt);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte* ImGuiTextBuffer_begin(ImGuiTextBuffer* self);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -1301,6 +1301,8 @@ namespace ImGuiNET
         public static extern ImGuiTextBuffer* ImGuiTextBuffer_ImGuiTextBuffer();
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImGuiTextBuffer_reserve(ImGuiTextBuffer* self, int capacity);
+        [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGuiTextBuffer_resize(ImGuiTextBuffer* self, int size);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ImGuiTextBuffer_size(ImGuiTextBuffer* self);
         [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
